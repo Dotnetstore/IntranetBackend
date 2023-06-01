@@ -29,7 +29,7 @@ internal static class StartupService
         return webApplication;
     }
 
-    internal static async Task StartWebAPI(this WebApplication webApplication)
+    internal static async Task StartWebAPIAsync(this WebApplication webApplication)
     {
         await webApplication.RunAsync();
     }

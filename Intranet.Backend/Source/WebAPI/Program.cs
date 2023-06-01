@@ -6,8 +6,7 @@ builder.AddServices();
 
 var app = builder.Build();
 
-app
+await app
     .AddSwagger()
-    .RegisterWebApplicationServices();
-    
-await app.StartWebAPI();
+    .RegisterWebApplicationServices()
+    .StartWebAPIAsync();
