@@ -8,8 +8,19 @@
 
     <ItemGroup>
       <PackageReference Include="FluentAssertions" Version="6.11.0" />
+      <PackageReference Include="FluentAssertions.Microsoft.Extensions.DependencyInjection" Version="1.0.0" />
       <PackageReference Include="FluentValidation" Version="11.5.2" />
+      <PackageReference Include="MockQueryable.Moq" Version="7.0.0" />
       <PackageReference Include="Moq" Version="4.18.4" />
+      <PackageReference Include="Moq.EntityFrameworkCore" Version="7.0.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Source\Core\Core.csproj" />
+      <ProjectReference Include="..\..\Source\Domain\Domain.csproj" />
+      <ProjectReference Include="..\..\Source\Organization\Organization.csproj" />
+      <ProjectReference Include="..\..\Source\Shared\Shared.csproj" />
+      <ProjectReference Include="..\..\Source\WebAPI\WebAPI.csproj" />
     </ItemGroup>
 
 </Project>
