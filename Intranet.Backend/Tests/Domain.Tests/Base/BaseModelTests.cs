@@ -1,7 +1,6 @@
 ﻿using Domain.Base;
 using FluentAssertions;
 using Moq;
-using NUnit.Framework.Internal;
 
 namespace Domain.Tests.Base;
 

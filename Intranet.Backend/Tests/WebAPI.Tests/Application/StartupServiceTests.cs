@@ -28,7 +28,7 @@ public class StartupServiceTests
     public void AddSwagger_Should_Be_WebApplication()
     {
         var result = _webApplication.AddSwagger();
-
+        
         result.Should().BeOfType<WebApplication>();
     }
 

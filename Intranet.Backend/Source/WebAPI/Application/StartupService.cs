@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using Settings.Domain;
 using WebAPI.Infrastructure;
 
 namespace WebAPI.Application;
@@ -22,6 +24,8 @@ internal static class StartupService
 
     internal static WebApplication RegisterWebApplicationServices(this WebApplication webApplication)
     {
+        webApplication.Map("Database", (IOptions<DatabaseOptions> opt) => opt.Value);
+        
         webApplication.UseHttpsRedirection();
         webApplication.UseAuthorization();
         webApplication.MapControllers();

@@ -18,6 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Commands\" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\TestHelper\TestHelper.csproj" />
     </ItemGroup>
 
