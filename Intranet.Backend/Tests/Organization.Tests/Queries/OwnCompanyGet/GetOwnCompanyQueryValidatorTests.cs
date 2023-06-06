@@ -1,7 +1,7 @@
 ﻿using Domain.Organization;
 using FluentAssertions;
 using Organization.Queries.OwnCompanyGet;
-using TestHelper.FakeData;
+using Organization.Tests.TestSettings;
 
 namespace Organization.Tests.Queries.OwnCompanyGet;
 
@@ -16,7 +16,7 @@ public class GetOwnCompanyQueryValidatorTests
         _validator = new GetOwnCompanyQueryValidator();
         _fakeObjectToTest = OrganizationFakeData.CreateOwnCompanyFakeData()[0];
     }
-
+    
     [Test]
     public void CreateCompanyCommandValidator_Should_BeSealed()
     {
@@ -24,7 +24,7 @@ public class GetOwnCompanyQueryValidatorTests
             .Should()
             .BeSealed();
     }
-
+    
     [Test]
     public void Name_Should_Have_MaximumLength100()
     {
@@ -35,7 +35,7 @@ public class GetOwnCompanyQueryValidatorTests
         _validator.Validate(query).IsValid.Should().BeFalse();
         _validator.Validate(query).Errors.Should().NotBeEmpty();
     }
-
+    
     [Test]
     public void VATNumber_Should_Have_MaximumLength30()
     {

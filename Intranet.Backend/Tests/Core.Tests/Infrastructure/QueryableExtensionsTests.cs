@@ -17,7 +17,7 @@ internal sealed class QueryableExtensionsTests
     [Test]
     public void WhereNullable_Should_RunCorrectly()
     {
-        IList<OwnCompany> _ownCompanies = new List<OwnCompany>
+        IList<OwnCompany> ownCompanies = new List<OwnCompany>
         {
             new()
             {
@@ -49,10 +49,10 @@ internal sealed class QueryableExtensionsTests
             }
         };
 
-        _ownCompanies.Count.Should().Be(2);
+        ownCompanies.Count.Should().Be(2);
 
         bool? isSystem = true;
-        var result = _ownCompanies.AsQueryable().WhereNullable(isSystem, q => q.IsSystem == isSystem).ToList();
+        var result = ownCompanies.AsQueryable().WhereNullable(isSystem, q => q.IsSystem == isSystem).ToList();
 
         result.Count.Should().Be(1);
     }

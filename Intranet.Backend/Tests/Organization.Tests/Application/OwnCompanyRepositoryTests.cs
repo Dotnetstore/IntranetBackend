@@ -1,51 +1,50 @@
-﻿using Core.Infrastructure;
-using Domain.Organization;
-using Microsoft.EntityFrameworkCore;
-using MockQueryable.Moq;
+﻿using Domain.Organization;
+using FluentAssertions;
 using Moq;
 using Organization.Abstractions;
 using Organization.Application;
 using Organization.Infrastructure;
 using Organization.Queries.OwnCompanyGet;
-using TestHelper.FakeData;
+using Organization.Tests.TestSettings;
+using Shared.Organization;
+using TestHelper.Helpers;
 
 namespace Organization.Tests.Application;
 
 internal sealed class OwnCompanyRepositoryTests
 {
     private CancellationToken _cancellationToken;
+    private IEnumerable<OwnCompanyDTO> _expected = null!;
     private Mock<OrganizationContext> _organizationContextMock = null!;
-    private Mock<IOwnCompanyRepository> _ownCompanyRepositoryMock = null!;
+    private IOwnCompanyRepository _ownCompanyRepository = null!;
+    private OwnCompany _data = null!;
 
     [SetUp]
     public void Setup()
     {
-        var mockOwnCompanyEntities = OrganizationFakeData.CreateOwnCompanyFakeData().BuildMock().BuildMockDbSet();
-        _cancellationToken = new CancellationTokenSource().Token;
-        _organizationContextMock = new Mock<OrganizationContext>();
-
-        _organizationContextMock.Setup<DbSet<OwnCompany>>(q => q.OwnCompanies)
-            .Returns(mockOwnCompanyEntities.Object);
-
-        _ownCompanyRepositoryMock = new Mock<IOwnCompanyRepository>();
-        
-        _ownCompanyRepositoryMock.Setup(q => q.GetAsync(It.IsAny<GetOwnCompanyQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((GetOwnCompanyQuery getOwnCompanyQuery, CancellationToken cancellationToken) =>
-                mockOwnCompanyEntities.Object
-                    .WhereNullable(getOwnCompanyQuery.Name, q => q.Name == getOwnCompanyQuery.Name)
-                    .WhereNullable(getOwnCompanyQuery.VATNumber, q => q.VATNumber == getOwnCompanyQuery.VATNumber)
-                    .WhereNullable(getOwnCompanyQuery.IsSystem, q => q.IsSystem == getOwnCompanyQuery.IsSystem)
-                    .Select(q => q.ToDTO())
-                    .ToList());
+        _cancellationToken = GenericTestObjects.GetCancellationToken();
+        _expected = OrganizationFakeData.CreateOwnCompanyFakeData().Select(q => q.ToDTO());
+        _organizationContextMock = OrganizationTestObjects.GetOrganizationContextMockForAsync();
+        _ownCompanyRepository = new OwnCompanyRepository(_organizationContextMock.Object);
+        _data = OrganizationFakeData.CreateOwnCompanyFakeData()[0];
     }
-
+    
     [Test]
-    public async Task Get_Should_Run_WithCorrectData()
+    public async Task GetAsync_Should_ReturnAllObjects()
     {
         var query = new GetOwnCompanyQuery(null, null, null);
 
-        await _ownCompanyRepositoryMock.Object.GetAsync(query, _cancellationToken);
+        var result = await _ownCompanyRepository.GetAsync(query, _cancellationToken);
+
+        result.Should().BeEquivalentTo(_expected);
+        _organizationContextMock.Verify(q => q.OwnCompanies, Times.Once);
+    }
+
+    [Test]
+    public void Add_Should_AddObject()
+    {
+        _ownCompanyRepository.Add(_data);
         
-        _ownCompanyRepositoryMock.Verify(q => q.GetAsync(query, _cancellationToken), Times.Once);
+        _organizationContextMock.Verify(q => q.OwnCompanies.Add(_data), Times.Once);
     }
 }

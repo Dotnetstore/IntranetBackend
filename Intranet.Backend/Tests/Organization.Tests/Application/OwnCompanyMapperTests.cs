@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Organization.Application;
+using Organization.Tests.TestSettings;
 using Shared.Organization;
-using TestHelper.FakeData;
 
 namespace Organization.Tests.Application;
 
@@ -14,16 +14,16 @@ internal sealed class OwnCompanyMapperTests
             .Should()
             .BeStatic();
     }
-
+    
     [Test]
     public void ToDTO_Should_ReturnCorrectMapping()
     {
         var objectToTest = OrganizationFakeData.CreateOwnCompanyFakeData()[0];
-
+    
         var result = objectToTest.ToDTO();
-
+    
         result.Should().BeOfType<OwnCompanyDTO>();
-
+    
         result.CreatedBy.Should().Be(objectToTest.CreatedBy);
         result.CreatedDate.Should().Be(objectToTest.CreatedDate);
         result.DeletedBy.Should().Be(objectToTest.DeletedBy);
