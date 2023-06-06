@@ -15,17 +15,19 @@ internal sealed class ServiceCollectionExtensionsTests
     {
         var builder = WebApplication.CreateBuilder();
         builder = builder.AddOrganizationServices();
-
+    
         builder.Services.Should().HaveService<IOwnCompanyRepository>().WithImplementation<OwnCompanyRepository>().AsScoped();
+        
         builder.Services.Should().HaveService<IUnitOfWork>().AsScoped();
+        builder.Services.Should().HaveService<OrganizationContext>().AsScoped();
     }
-
+    
     [Test]
     public void AddOrganizationServices_Should_Return_WebApplicationBuilder()
     {
         var builder = WebApplication.CreateBuilder();
         builder = builder.AddOrganizationServices();
-
+    
         builder.Should().BeOfType<WebApplicationBuilder>();
     }
 }
